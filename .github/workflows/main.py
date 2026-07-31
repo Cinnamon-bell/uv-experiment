@@ -11,18 +11,13 @@ def current_datetime() -> datetime:
     return datetime.now()
 
 
-def write_log(now: datetime) -> None:
-    """Write the current date and time to a log file."""
-    with open("run_log.txt", "a", encoding="utf-8") as f:
-        f.write(f"Workflow ran at: {now.strftime('%Y-%m-%d %H:%M:%S')}\n")
-
-
 def main() -> None:
     """Run the application."""
     greeting()
     now = current_datetime()
     print("Current date and time:", now.strftime("%Y-%m-%d %H:%M:%S"))
-    write_log(now)
+    with open("automation_success.txt", "w") as f:
+        f.write(f"Automation completed successfully at {now.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
 
 if __name__ == "__main__":
