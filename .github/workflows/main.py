@@ -16,6 +16,8 @@ def main() -> None:
     greeting()
     now = current_datetime()
     print("Current date and time:", now.strftime("%Y-%m-%d %H:%M:%S"))
+    with open("automation_success.txt", "w") as f:
+        f.write(f"Automation completed successfully at {now.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
 
 if __name__ == "__main__":
