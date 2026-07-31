@@ -2,7 +2,7 @@ name: Scheduled automation
 
 on:
   schedule:
-    - cron: "35 8 * * *"      # Every day at 08:00 UTC
+    - cron: "0 8 * * *"      # Every day at 08:00 UTC
     - cron: "30 18 * * 1"    # Every Monday at 18:30 UTC
   workflow_dispatch:
 
@@ -25,17 +25,21 @@ jobs:
 
       - name: Read repository secret
         env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
+          EXTENTION_SECRET: ${{ secrets.EXTENTION_SECRET }}
         run: |
           echo "Repository secret is available."
-          echo "Length: ${#MY_SECRET}"
+          echo "Length: ${#EXTENTION_SECRET}"
 
-      - name: Commit updated log
+      - name: Create daily report
+        run: |
+          echo "Daily report generated on $(date)" >> daily_report.txt
+
+      - name: Commit daily report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add automation_success.txt
+          git add automation_success.txt daily_report.txt
 
           git diff --cached --quiet || git commit -m "Daily automation update"
 
