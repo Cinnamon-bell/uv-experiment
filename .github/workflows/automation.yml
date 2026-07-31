@@ -1,14 +1,52 @@
 name: Scheduled automation
+
 on:
-    schedule:
-        - cron: "28 12 * * *" #  minutes, hours, day of month, month, day of week
-    workflow_dispatch:        
+  schedule:
+    - cron: "0 8 * * *"      # Every day at 08:00 UTC
+    - cron: "30 18 * * 1"    # Every Monday at 18:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
-    run:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: astral-sh/setup-uv@v5
-            - name: Run automation script
-              working-directory: .github/workflows
-              run: uv run main.py
+  daily-job:
+    if: github.event.schedule == '0 8 * * *'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Run automation script
+        working-directory: .github/workflows
+        run: uv run main.py
+
+      - name: Append daily message
+        run: echo "Daily job ran on $(date)" >> automation_success.txt
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add automation_success.txt
+          git diff --cached --quiet || git commit -m "Daily automation"
+          git push
+
+  weekly-job:
+    if: github.event.schedule == '30 18 * * 1'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create weekly report
+        run: echo "Weekly report generated on $(date)" >> weekly_report.txt
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add weekly_report.txt
+          git diff --cached --quiet || git commit -m "Weekly report"
+          git push
