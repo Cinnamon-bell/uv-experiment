@@ -17,12 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: astral-sh/setup-uv@v5
-
-      - name: Run automation script
-        working-directory: .github/workflows
-        run: uv run main.py
-
       - name: Read repository secret
         env:
           EXTENTION_SECRET: ${{ secrets.EXTENTION_SECRET }}
@@ -39,9 +33,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add automation_success.txt daily_report.txt
+          git add daily_report.txt
 
-          git diff --cached --quiet || git commit -m "Daily automation update"
+          git diff --cached --quiet || git commit -m "Daily report update"
 
           git push
 
