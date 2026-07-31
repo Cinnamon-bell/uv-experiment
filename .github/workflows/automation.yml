@@ -16,21 +16,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: astral-sh/setup-uv@v5
 
       - name: Run automation script
         working-directory: .github/workflows
         run: uv run main.py
 
-      - name: Append daily message
-        run: echo "Daily job ran on $(date)" >> automation_success.txt
+      - name: Read repository secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: |
+          echo "Repository secret is available."
+          echo "Length: ${#MY_SECRET}"
 
-      - name: Commit changes
+      - name: Commit updated log
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add automation_success.txt
-          git diff --cached --quiet || git commit -m "Daily automation"
+
+          git diff --cached --quiet || git commit -m "Daily automation update"
+
           git push
 
   weekly-job:
@@ -41,12 +49,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create weekly report
-        run: echo "Weekly report generated on $(date)" >> weekly_report.txt
+        run: |
+          echo "Weekly report generated on $(date)" >> weekly_report.txt
 
-      - name: Commit report
+      - name: Commit weekly report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add weekly_report.txt
-          git diff --cached --quiet || git commit -m "Weekly report"
+
+          git diff --cached --quiet || git commit -m "Weekly report update"
+
           git push
