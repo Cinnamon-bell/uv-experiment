@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   daily-job:
-    if: github.event.schedule == '0 8 * * *'
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 8 * * *'
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
           git push
 
   weekly-job:
-    if: github.event.schedule == '30 18 * * 1'
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 18 * * 1'
     runs-on: ubuntu-latest
 
     steps:
