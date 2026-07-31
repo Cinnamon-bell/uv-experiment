@@ -37,9 +37,11 @@ jobs:
 
           git diff --cached --quiet || git commit -m "Daily report update"
 
+          git pull --rebase
           git push
 
   weekly-job:
+    needs: daily-job
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 18 * * 1'
     runs-on: ubuntu-latest
 
@@ -59,4 +61,5 @@ jobs:
 
           git diff --cached --quiet || git commit -m "Weekly report update"
 
+          git pull --rebase
           git push
