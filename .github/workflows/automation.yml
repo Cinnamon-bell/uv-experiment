@@ -1,7 +1,7 @@
 name: Scheduled automation
 on:
     schedule:
-        - cron: "0 8 * * *" # every day at 08:00 UTC
+        - cron: "28 12 * * *" # every day at 08:00 UTC   minutes hours day of month month day of week
     workflow_dispatch:        
 jobs:
     run:
