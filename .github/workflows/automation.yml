@@ -9,4 +9,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - uses: astral-sh/setup-uv@v5
-            - run: uv run main.py
+            - name: Run automation script
+              working-directory: .github/workflows
+              run: uv run main.py
